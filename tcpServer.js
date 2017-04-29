@@ -5,7 +5,7 @@ var net = require('net');
 var sql = require('./sql');
 
 var HOST = '0.0.0.0';
-var PORT = 2008;
+var PORT = Number(process.env.PORT) || 2008;
 
 sql.connect(function () {
     console.log('sql did connected.');
@@ -42,15 +42,14 @@ net.createServer(function(sock) {
         // console.log( encodeURIComponent(data.toString()) );
         // console.log( dataString.slice(-2) == '\n\r' );
         
-        if (dataString.slice(-2) != '\n\r') {
+        if (dataString.slice(-2) != '\n\r' && dataString.slice(-1) != '\n') {
             tcpConnects[sock.remoteAddress] = dataString;
-            // console.log('000');
         } else {
-            // console.log('111');
             dataString = tcpConnects[sock.remoteAddress] ? tcpConnects[sock.remoteAddress] + dataString : dataString;
             tcpConnects[sock.remoteAddress] = '';
-            var sqlStatement = "INSERT INTO log (log) VALUES ($1)";
-            sql.query(sqlStatement, [uuid+dataString], function(err, res) {
+            var tableName = 'device_logs';
+            var sqlStatement = "INSERT INTO "+tableName+" (log, uuid, mark, created_at, updated_at) VALUES ($1, $2, $3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)";
+            sql.query(sqlStatement, [uuid+dataString, uuid, false], function(err, res) {
                 if(err) {
                     return console.error('error running query', err);
                 }

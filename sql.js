@@ -9,13 +9,15 @@ const pg = require('pg');
 // will be read if the config is not present
 var config = {
     user: '', //env var: PGUSER
-    database: 'ddc_test', //env var: PGDATABASE
-    password: '', //env var: PGPASSWORD
-    host: 'localhost', // Server hosting the postgres database
-    port: 5432, //env var: PGPORT
+    database: process.env.DATABASE, //env var: PGDATABASE
+    password: process.env.PASSWORD || '', //env var: PGPASSWORD
+    host: process.env.HOST || 'localhost', // Server hosting the postgres database
+    port: process.env.DATABASEPORT || 5432, //env var: PGPORT
     max: 10, // max number of clients in the pool
     idleTimeoutMillis: 30000, // how long a client is allowed to remain idle before being closed
 };
+
+console.log(config);
 
 //this initializes a connection pool
 //it will keep idle connections open for 30 seconds

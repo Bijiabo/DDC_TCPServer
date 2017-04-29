@@ -8,7 +8,7 @@ const pg = require('pg');
 // note: all config is optional and the environment variables
 // will be read if the config is not present
 var config = {
-    user: '', //env var: PGUSER
+    user: process.env.DATABASEUSER || '', //env var: PGUSER
     database: process.env.DATABASE, //env var: PGDATABASE
     password: process.env.PASSWORD || '', //env var: PGPASSWORD
     host: process.env.HOST || 'localhost', // Server hosting the postgres database

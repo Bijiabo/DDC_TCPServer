@@ -6,4 +6,4 @@ WORKDIR /usr/src/ddc_tcpserver
 RUN npm install
 
 EXPOSE 2008
-CMD node tcpServer.js
+CMD npm run start

@@ -33,7 +33,7 @@ net.createServer(function(sock) {
         
         // 设定 uuid
         if (dataString[0] == '_' && dataString.slice(-1) == '_') {
-            uuid = dataString;
+            uuid = dataString.replace(/^_|_$/ig, '');
             return;
         }
         
@@ -49,7 +49,7 @@ net.createServer(function(sock) {
             tcpConnects[sock.remoteAddress] = '';
             var tableName = 'device_logs';
             var sqlStatement = "INSERT INTO "+tableName+" (log, uuid, mark, created_at, updated_at) VALUES ($1, $2, $3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)";
-            sql.query(sqlStatement, [uuid+dataString, uuid, false], function(err, res) {
+            sql.query(sqlStatement, [dataString, uuid, false], function(err, res) {
                 if(err) {
                     return console.error('error running query', err);
                 }

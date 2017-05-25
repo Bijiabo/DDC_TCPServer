@@ -37,27 +37,17 @@ net.createServer(function(sock) {
             return;
         }
         
-        // 回发该数据，客户端将收到来自服务端的数据
-        // sock.write('You said "' + data + '"');
-        // console.log( encodeURIComponent(data.toString()) );
-        // console.log( dataString.slice(-2) == '\n\r' );
+        if (tcpConnects[uuid] == dataString) { return; }
+        var tableName = 'device_logs';
+        var sqlStatement = "INSERT INTO "+tableName+" (log, uuid, mark, created_at, updated_at) VALUES ($1, $2, $3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)";
+        sql.query(sqlStatement, [dataString, uuid, false], function(err, res) {
+            if(err) {
+                return console.error('error running query', err);
+            }
         
-        if (dataString.slice(-2) != '\n\r' && dataString.slice(-1) != '\n') {
-            tcpConnects[sock.remoteAddress] = dataString;
-        } else {
-            dataString = tcpConnects[sock.remoteAddress] ? tcpConnects[sock.remoteAddress] + dataString : dataString;
-            tcpConnects[sock.remoteAddress] = '';
-            var tableName = 'device_logs';
-            var sqlStatement = "INSERT INTO "+tableName+" (log, uuid, mark, created_at, updated_at) VALUES ($1, $2, $3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)";
-            sql.query(sqlStatement, [dataString, uuid, false], function(err, res) {
-                if(err) {
-                    return console.error('error running query', err);
-                }
-        
-                // console.log('number:', res);
-            });
-        }
-        
+            // console.log('number:', res);
+        });
+        tcpConnects[uuid] = dataString;
         
     });
     

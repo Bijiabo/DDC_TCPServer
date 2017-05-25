@@ -13,9 +13,17 @@ client.connect(PORT, HOST, function() {
     // 建立连接后立即向服务器发送数据，服务器将收到这些数据
     client.write('_local_server_');
     
+    var count = 0;
+    var skipCount = true;
+    
     setInterval(function () {
-        client.write('biubiubiu' + new Date() + '\r\n\r');
-    }, 1000);
+        // client.write('biubiubiu' + new Date() + '\r\n\r');
+        client.write('biubiubiu ' + count + '\r\n\r');
+        if (skipCount) {
+            count++;
+        }
+        skipCount = !skipCount;
+    }, 3000);
 });
 
 // 为客户端添加“data”事件处理函数

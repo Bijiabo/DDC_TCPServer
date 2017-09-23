@@ -2,7 +2,7 @@
  * Created by huchunbo on 2017/4/29.
  */
 const pg = require('pg');
-
+const tableName = 'device_logs';
 // create a config to configure both pooling behavior
 // and client options
 // note: all config is optional and the environment variables
@@ -45,3 +45,18 @@ module.exports.query = function (text, values, callback) {
 module.exports.connect = function (callback) {
     return pool.connect(callback);
 };
+
+// ctrate table
+module.exports.setupDB = function (callback) {
+    var createTableStatement = `CREATE TABLE ${tableName}(
+    id SERIAL PRIMARY KEY, 
+    uuid VARCHAR(255) not null, 
+    log text,
+    mark BOOLEAN,
+    created_at timestamp,
+    updated_at timestamp
+    )`;
+    pool.query(createTableStatement, [], callback);
+}
+
+module.exports.tableName = tableName;

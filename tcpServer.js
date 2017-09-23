@@ -47,9 +47,13 @@ net.createServer(function(sock) {
         
         if (uuid.length == 0) {
             console.log('未设定 uuid');
+            sock.write(`Did not received device ID, will destory the connect.`);
             sock.destroy();
             return;
         }
+        
+        sock.write(`Received content: ${dataString}!`);
+        
         if (tcpConnects[uuid] == dataString) { return; }
         
         var tableName = sql.tableName;
@@ -85,6 +89,7 @@ net.createServer(function(sock) {
     });
     
     // 超时自动断开连接，防止死链
+    /*
     var checkConnectIntervalTime = 1000 * 20; //每 20s 检测一下是否断开连接
     var checkConnectIntervalID = setInterval(function () {
         var currentTime = new Date();
@@ -95,7 +100,7 @@ net.createServer(function(sock) {
             console.log('超过 20s 未有新数据。');
         }
     }, checkConnectIntervalTime);
-    
+    */
 }).listen(PORT, HOST);
 
 console.log('Server listening on ' + HOST +':'+ PORT);

@@ -23,7 +23,7 @@ var tcpConnects = {};
 net.createServer(function(sock) {
     
     // 我们获得一个连接 - 该连接自动关联一个socket对象
-    console.log('CONNECTED: ' +
+    // console.log('CONNECTED: ' +
         sock.remoteAddress + ':' + sock.remotePort);
     sock.write("Hello! You are connected to DDC service. Please give me your device ID (mac).");
     
@@ -71,11 +71,13 @@ net.createServer(function(sock) {
     
     // 为这个socket实例添加一个"close"事件处理函数
     sock.on('close', function(data) {
+        /*
         console.log(
             'CLOSED: ' +
             sock.remoteAddress + ' ' +
             sock.remotePort
         );
+        */
     });
     
     // 非正常断开

@@ -57,6 +57,7 @@ net.createServer(function(sock) {
         if (tcpConnects[uuid] == dataString) { return; }
         
         var tableName = sql.tableName;
+        /*
         var sqlStatement = "INSERT INTO "+tableName+" (log, uuid, mark, created_at, updated_at) VALUES ($1, $2, $3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)";
         sql.query(sqlStatement, [dataString, uuid, false], function(err, res) {
             if(err) {
@@ -65,6 +66,7 @@ net.createServer(function(sock) {
         
             // console.log('number:', res);
         });
+        */
         tcpConnects[uuid] = dataString;
         
     });
